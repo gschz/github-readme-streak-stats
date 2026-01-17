@@ -1,0 +1,16 @@
+.devcontainer/
+.github/
+.vercel/
+tests/
+docs/
+scripts/
+Aptfile
+Procfile
+Dockerfile
+app.json
+.env
+.env.*
+README.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+LICENSE
