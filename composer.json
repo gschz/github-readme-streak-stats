@@ -36,6 +36,11 @@
         "phpunit/phpunit": "^11",
         "friendsofphp/php-cs-fixer": "^3.64"
     },
+  "config": {
+    "platform": {
+      "php": "8.2.0"
+    }
+  },
     "scripts": {
         "start": [
             "Composer\\Config::disableProcessTimeout",
