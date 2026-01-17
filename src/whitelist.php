@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Check if a GitHub username is allowed based on the whitelist
  *
@@ -9,5 +11,6 @@
 function isWhitelisted(string $user): bool
 {
     $whitelist = array_map("trim", array_filter(explode(",", $_SERVER["WHITELIST"] ?? "")));
+
     return empty($whitelist) || in_array($user, $whitelist, true);
 }

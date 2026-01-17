@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $TRANSLATIONS = include __DIR__ . "/../src/translations.php";
 
 /**
@@ -47,6 +49,7 @@ function getProgress(array $translations): array
     uasort($progress, function ($a, $b) {
         return $b["percentage"] <=> $a["percentage"];
     });
+
     return $progress;
 }
 
@@ -92,6 +95,7 @@ function progressToBadges(array $progress): string
         $table .= "</tr>";
     }
     $table .= "</tbody></table>\n";
+
     return $table;
 }
 
@@ -114,6 +118,7 @@ function updateReadme(string $path, string $start, string $end, string $content)
     $end_pos = strpos($readme, $end);
     $length = $end_pos - $start_pos;
     $readme = substr_replace($readme, $content, $start_pos, $length);
+
     return file_put_contents($path, $readme);
 }
 

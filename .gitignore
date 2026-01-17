@@ -19,3 +19,7 @@ docker_tag
 # IDE
 .vscode/
 .idea/
+
+# CS Fixer
+.php-cs-fixer.cache
+.php-cs-fixer.dist.php

@@ -49,6 +49,7 @@ function formatDate(string $dateString, string|null $format, string $locale): st
             $formatted = $dateFormatter->format($date);
         }
     }
+
     // sanitize and return formatted date
     return htmlspecialchars($formatted);
 }
@@ -81,6 +82,7 @@ function translateDays(array $days, string $locale): array
     foreach ($days as $day) {
         $translatedDays[] = $dateFormatter->format(new DateTime($day));
     }
+
     return $translatedDays;
 }
 
@@ -96,6 +98,7 @@ function getExcludingDaysText($excludedDays, $localeTranslations, $localeCode)
 {
     $separator = $localeTranslations["comma_separator"] ?? ", ";
     $daysCommaSeparated = implode($separator, translateDays($excludedDays, $localeCode));
+
     return str_replace("{days}", $daysCommaSeparated, $localeTranslations["Excluding {days}"]);
 }
 
@@ -208,6 +211,7 @@ function utf8WordWrap(string $string, int $width = 75, string $break = "\n", boo
     if ($cut_long_words) {
         $string = preg_replace("/(\S{" . $width . "})(?=\S)/u", "$1$break", $string);
     }
+
     // trim any trailing line breaks
     return rtrim($string, $break);
 }
@@ -247,6 +251,7 @@ function splitLines(string $text, int $maxChars, int $line1Offset): string
         }
     }
     $text = htmlspecialchars($text);
+
     return preg_replace(
         "/^(.*)\n(.*)/",
         "<tspan x='0' dy='{$line1Offset}'>$1</tspan><tspan x='0' dy='16'>$2</tspan>",
@@ -275,6 +280,7 @@ function normalizeLocaleCode(string $localeCode): string
     $script = ucfirst(strtolower($script));
     // convert region to uppercase
     $region = strtoupper($region);
+
     // combine language, script, and region using underscores
     return implode("_", array_filter([$language, $script, $region]));
 }
@@ -304,6 +310,7 @@ function getTranslations(string $localeCode): array
     }
     // fill in missing translations with English
     $localeTranslations += $translations["en"];
+
     // return the translations
     return $localeTranslations;
 }
@@ -319,6 +326,7 @@ function getCardWidth(array $params, int $numColumns = 3): int
 {
     $defaultWidth = 495;
     $minimumWidth = 100 * $numColumns;
+
     return max($minimumWidth, intval($params["card_width"] ?? $defaultWidth));
 }
 
@@ -332,6 +340,7 @@ function getCardHeight(array $params): int
 {
     $defaultHeight = 195;
     $minimumHeight = 170;
+
     return max($minimumHeight, intval($params["card_height"] ?? $defaultHeight));
 }
 
@@ -355,6 +364,7 @@ function formatNumber(float $num, string $localeCode, bool $useShortNumbers): st
         $suffix = $units[$i];
         $num = round($num, 1);
     }
+
     return $numFormatter->format($num) . $suffix;
 }
 
@@ -693,6 +703,7 @@ function removeAnimations(string $svg): string
     $svg = preg_replace("/(animation: fadein[^;'\"]+)/m", "opacity: 1;", $svg);
     $svg = preg_replace("/(animation: currstreak[^;'\"]+)/m", "font-size: 28px;", $svg);
     $svg = preg_replace("/<a \X*?>(\X*?)<\/a>/m", '\1', $svg);
+
     return $svg;
 }
 
@@ -750,6 +761,7 @@ function convertHexColors(string $svg): string
             $result = convertHexColor($matches[2]);
             $color = $result["color"];
             $opacity = $result["opacity"];
+
             return "{$attribute}='{$color}' {$opacityAttribute}='{$opacity}'";
         },
         $svg,
@@ -816,6 +828,7 @@ function generateOutput(string|array $output, array $params = null): array
     if ($requestedType === "json") {
         // generate array from output
         $data = gettype($output) === "string" ? ["error" => $output] : $output;
+
         return [
             "contentType" => "application/json",
             "body" => json_encode($data),
@@ -835,6 +848,7 @@ function generateOutput(string|array $output, array $params = null): array
             $cardWidth = (int) preg_replace("/.*width=[\"'](\d+)px[\"'].*/", "$1", $svg);
             $cardHeight = (int) preg_replace("/.*height=[\"'](\d+)px[\"'].*/", "$1", $svg);
             $png = convertSvgToPng($svg, $cardWidth, $cardHeight);
+
             return [
                 "contentType" => "image/png",
                 "body" => $png,

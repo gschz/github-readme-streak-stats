@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // return a list of valid CSS colors
 return [
     "aliceblue",

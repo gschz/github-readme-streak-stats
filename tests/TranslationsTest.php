@@ -55,6 +55,7 @@ final class TranslationsTest extends TestCase
         $remaining_locales = array_slice($locales, 1);
         $sorted_locales = call_user_func(function (array $arr) {
             asort($arr);
+
             return $arr;
         }, $remaining_locales);
         // check that the remaining locales are sorted alphabetically
