@@ -10,6 +10,23 @@ require_once $autoload;
 require_once "stats.php";
 require_once "card.php";
 
+// load environment variables from platform into $_SERVER
+$token = getenv("TOKEN");
+if ($token !== false && $token !== "") {
+    $_SERVER["TOKEN"] = $token;
+}
+for ($i = 2; $i <= 20; $i++) {
+    $t = getenv("TOKEN{$i}");
+    if ($t === false || $t === "") {
+        break;
+    }
+    $_SERVER["TOKEN{$i}"] = $t;
+}
+$whitelist = getenv("WHITELIST");
+if ($whitelist !== false && $whitelist !== "") {
+    $_SERVER["WHITELIST"] = $whitelist;
+}
+
 // load .env
 $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1));
 $dotenv->safeLoad();
