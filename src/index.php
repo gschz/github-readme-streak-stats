@@ -19,16 +19,15 @@ if (!isset($_SERVER["TOKEN"])) {
     renderOutput($message, 500);
 }
 
-// set cache to refresh once per three horus
-$cacheMinutes = 3 * 60 * 60;
-header("Expires: " . gmdate("D, d M Y H:i:s", time() + $cacheMinutes) . " GMT");
+// set cache to refresh once per three hours and enable CDN caching
+$cacheSeconds = 3 * 60 * 60;
+header("Expires: " . gmdate("D, d M Y H:i:s", time() + $cacheSeconds) . " GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: public, max-age=$cacheMinutes");
+header("Cache-Control: public, max-age={$cacheSeconds}, s-maxage={$cacheSeconds}, stale-while-revalidate=60");
 
-// redirect to demo site if user is not given
+// require user parameter
 if (!isset($_REQUEST["user"])) {
-    header("Location: demo/");
-    exit();
+    renderOutput("Missing 'user' parameter.", 400);
 }
 
 try {
