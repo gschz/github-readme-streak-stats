@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 // load functions
-require_once "../vendor/autoload.php";
+$root1 = dirname(__DIR__, 2) . "/vendor/autoload.php";
+$root2 = dirname(__DIR__, 1) . "/vendor/autoload.php";
+$autoload = is_readable($root1) ? $root1 : $root2;
+require_once $autoload;
 require_once "stats.php";
 require_once "card.php";
 
