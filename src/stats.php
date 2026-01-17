@@ -15,6 +15,7 @@ function buildContributionGraphQuery(string $user, int $year): string
 {
     $start = "$year-01-01T00:00:00Z";
     $end = "$year-12-31T23:59:59Z";
+
     return "query {
         user(login: \"$user\") {
             createdAt
@@ -111,6 +112,7 @@ function executeContributionGraphRequests(string $user, array $years): array
         curl_multi_remove_handle($multi, $handle);
     }
     curl_multi_close($multi);
+
     return $responses;
 }
 
@@ -154,6 +156,7 @@ function getContributionGraphs(string $user, ?int $startingYear = null): array
     }
     // get the contribution graphs for the previous years
     $responses += executeContributionGraphRequests($user, $yearsToRequest);
+
     return $responses;
 }
 
@@ -178,6 +181,7 @@ function getGitHubTokens(): array
     }
     // store for future use
     $GLOBALS["ALL_TOKENS"] = $tokens;
+
     return $tokens;
 }
 
@@ -195,6 +199,7 @@ function getGitHubToken(): string
     if (empty($all_tokens)) {
         throw new AssertionError("There is no GitHub token available.", 500);
     }
+
     return $all_tokens[array_rand($all_tokens)];
 }
 
@@ -245,6 +250,7 @@ function getGraphQLCurlHandle(string $query, string $token): CurlHandle
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
     curl_setopt($ch, CURLOPT_VERBOSE, false);
+
     return $ch;
 }
 
@@ -276,6 +282,7 @@ function getContributionDates(array $contributionGraphs): array
             }
         }
     }
+
     return $contributions;
 }
 
@@ -291,6 +298,7 @@ function normalizeDays(array $days): array
         array_map(function ($dayOfWeek) {
             // trim whitespace, capitalize first letter only, return first 3 characters
             $dayOfWeek = substr(ucfirst(strtolower(trim($dayOfWeek))), 0, 3);
+
             // return day if valid, otherwise return null
             return in_array($dayOfWeek, ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]) ? $dayOfWeek : null;
         }, $days),
@@ -310,6 +318,7 @@ function isExcludedDay(string $date, array $excludedDays): bool
         return false;
     }
     $day = date("D", strtotime($date)); // "D" = Mon, Tue, Wed, etc.
+
     return in_array($day, $excludedDays);
 }
 
@@ -378,6 +387,7 @@ function getContributionStats(array $contributions, array $excludedDays = []): a
             $stats["currentStreak"]["end"] = $today;
         }
     }
+
     return $stats;
 }
 
@@ -390,6 +400,7 @@ function getContributionStats(array $contributions, array $excludedDays = []): a
 function getPreviousSunday(string $date): string
 {
     $dayOfWeek = date("w", strtotime($date));
+
     return date("Y-m-d", strtotime("-$dayOfWeek days", strtotime($date)));
 }
 
@@ -469,5 +480,6 @@ function getWeeklyContributionStats(array $contributions): array
             $stats["currentStreak"]["end"] = $thisWeek;
         }
     }
+
     return $stats;
 }

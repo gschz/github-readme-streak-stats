@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // mapping of theme colors given a theme name
 return [
     "default" => [
